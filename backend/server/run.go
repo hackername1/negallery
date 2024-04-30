@@ -17,8 +17,6 @@ func Run() {
 	router.HandleFunc(apiUrl+"/getImageData", GetImageData).Methods("GET")
 
 	startServer(router)
-
-	// TODO: Gorutine
 }
 
 // Load the environment variables
