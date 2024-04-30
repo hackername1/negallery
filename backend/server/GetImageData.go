@@ -13,8 +13,8 @@ func GetImageData(writer http.ResponseWriter, request *http.Request) {
 	var response Response
 
 	// Get arguments from URL
-	queryParams := request.URL.Query()
-	imageId := queryParams.Get("id")
+	var queryParams = request.URL.Query()
+	var imageId = queryParams.Get("id")
 
 	imageIdInt, err := strconv.Atoi(imageId)
 	if err != nil {
