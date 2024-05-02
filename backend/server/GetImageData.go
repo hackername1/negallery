@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-func GetImageData(writer http.ResponseWriter, request *http.Request) {
+func GetImage(writer http.ResponseWriter, request *http.Request) {
 	var response Response
 
 	// Get arguments from URL

@@ -16,8 +16,8 @@ func Run() {
 	router := mux.NewRouter()
 	router.Use(corsMiddleware)
 
-	router.HandleFunc(apiUrl+"/getImageData", GetImageData).Methods("GET")
-	router.HandleFunc(apiUrl+"/getImageDataList", GetImageDataList).Methods("GET")
+	router.HandleFunc(apiUrl+"/getImage", GetImage).Methods("GET")
+	router.HandleFunc(apiUrl+"/getImageList", GetImageList).Methods("GET")
 
 	startServer(router)
 }
