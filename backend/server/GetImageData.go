@@ -24,6 +24,7 @@ func GetImageData(writer http.ResponseWriter, request *http.Request) {
 			Response: "",
 		}
 		json.NewEncoder(writer).Encode(response)
+		return
 	}
 
 	imageData, err := dbGetImageData(imageIdInt)
