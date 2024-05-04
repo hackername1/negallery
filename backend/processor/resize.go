@@ -17,14 +17,14 @@ func (img *Image) ResizeByWidth(width int) (*Image, error) {
 	reader := bytes.NewReader(img.ImageBytes)
 
 	// Decode the image
-	image, _, err := image.Decode(reader)
+	originalImage, _, err := image.Decode(reader)
 	if err != nil {
 		log.Println("Error decoding image: ", err)
 		return nil, err
 	}
 
 	// Get the image size
-	size := image.Bounds().Size()
+	size := originalImage.Bounds().Size()
 
 	scaleFactor := float64(width) / float64(size.X)
 	if width > size.X {
@@ -35,7 +35,7 @@ func (img *Image) ResizeByWidth(width int) (*Image, error) {
 	var height = int(float64(size.Y) * scaleFactor)
 
 	// Resize the image
-	newImage := imaging.Resize(image, width, height, imaging.Lanczos)
+	newImage := imaging.Resize(originalImage, width, height, imaging.Lanczos)
 	if err != nil {
 		return nil, err
 	}
