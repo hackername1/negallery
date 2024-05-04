@@ -29,7 +29,7 @@ jobs:
           REMOTE_HOST: ${{ secrets.HOST }}
           REMOTE_USER: ${{ secrets.USERNAME }}
           SSH_PRIVATE_KEY: ${{ secrets.KEY }}
-          source: main
+          source: backend/main
           target: ${{ secrets.SERVER_PATH }}
           SCRIPT_BEFORE: |
             sudo service gallery_go_backend stop
