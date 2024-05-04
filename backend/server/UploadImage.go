@@ -5,6 +5,7 @@ import (
 	"io"
 	"log"
 	"main/processor"
+	"mime/multipart"
 	"net/http"
 	"os"
 	"strconv"
@@ -40,7 +41,12 @@ func UploadImage(w http.ResponseWriter, r *http.Request) {
 		log.Println("Error getting the file from the form: ", err)
 		return
 	}
-	defer file.Close()
+	defer func(file multipart.File) {
+		err := file.Close()
+		if err != nil {
+			log.Println("Error closing the file: ", err)
+		}
+	}(file)
 
 	// Check the file format to match jpg or png
 	if handler.Header.Get("Content-Type") != "image/jpeg" &&
