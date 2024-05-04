@@ -13,13 +13,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Navigate to backend dir
+        run: cd backend
       - name: Set up Go
         uses: actions/setup-go@v4
         with:
           go-version: '1.22'
-          
+
       - name: Build
-        run: go build -v ./backend/...
+        run: go build .
         
       - name: Deploy to Server
         uses: easingthemes/ssh-deploy@main
