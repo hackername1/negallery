@@ -14,7 +14,8 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Navigate to backend dir
-        run: cd backend
+        run: cd backend | dir
+        
       - name: Set up Go
         uses: actions/setup-go@v4
         with:
