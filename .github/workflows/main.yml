@@ -1,0 +1,37 @@
+name: Deploy to DigitalOcean Droplet
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.22'
+
+      - name: Build
+        run: |
+          cd backend
+          go build .
+        
+      - name: Deploy to Server
+        uses: easingthemes/ssh-deploy@main
+        with:
+          REMOTE_HOST: ${{ secrets.HOST }}
+          REMOTE_USER: ${{ secrets.USERNAME }}
+          SSH_PRIVATE_KEY: ${{ secrets.KEY }}
+          source: ./backend/
+          target: ${{ secrets.SERVER_PATH }}
+          SCRIPT_BEFORE: |
+            sudo service gallery_go_backend stop
+          SCRIPT_AFTER: |
+            sudo service gallery_go_backend start
