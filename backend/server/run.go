@@ -87,7 +87,7 @@ func startServer(router *mux.Router) {
 				router,
 			))
 	} else {
-		// Start the HTTP server
+		// Start the HTTPS server
 		log.Fatal(
 			http.ListenAndServeTLS(
 				serverPort,
