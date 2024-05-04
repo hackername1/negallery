@@ -75,12 +75,12 @@ func ConnectDatabase() *sql.DB {
 
 // Start the server
 func startServer(router *mux.Router) {
-	var sqlMode = false
-	if _, err := os.Stat("fullchain.crt"); os.IsNotExist(err) {
-		sqlMode = true
+	var httpMode = false
+	if _, err := os.Stat(myEnvironment["CERT_FILE"]); os.IsNotExist(err) {
+		httpMode = true
 	}
 
-	if sqlMode {
+	if httpMode {
 		// Start the HTTP server
 		log.Fatal(
 			http.ListenAndServe(
@@ -93,7 +93,7 @@ func startServer(router *mux.Router) {
 			http.ListenAndServeTLS(
 				serverPort,
 				myEnvironment["CERT_FILE"],
-				myEnvironment["KEY_FILE"],
+				myEnvironment["PRIVATE_KEY_FILE"],
 				router,
 			))
 	}
