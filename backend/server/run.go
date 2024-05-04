@@ -18,6 +18,7 @@ func Run() {
 
 	router.HandleFunc(apiUrl+"/getImage", GetImage).Methods("GET")
 	router.HandleFunc(apiUrl+"/getImageList", GetImageList).Methods("GET")
+	router.HandleFunc(apiUrl+"/uploadImage", UploadImage).Methods("POST")
 
 	startServer(router)
 }
