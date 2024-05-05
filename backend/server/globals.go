@@ -3,6 +3,7 @@ package server
 import "database/sql"
 
 // Variables
+var localMode bool
 var database *sql.DB
 var myEnvironment map[string]string
 
