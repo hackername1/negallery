@@ -11,16 +11,55 @@ import (
 )
 
 func Run() {
+	// Load the environment variables
 	loadEnvironment()
-	database = ConnectDatabase()
-	router := mux.NewRouter()
-	router.Use(corsMiddleware)
 
+	// Connect to the database
+	database = ConnectDatabase()
+
+	// Create the router
+	router := mux.NewRouter()
+
+	// Determine whether host is local or web
+	var localMode = false
+	if _, err := os.Stat(myEnvironment["CERT_FILE"]); os.IsNotExist(err) {
+		localMode = true
+	}
+
+	// Set up the router
+	router.Use(corsMiddleware)
+	if localMode {
+		router.Host(localHost)
+	} else {
+		router.Host(webHost)
+	}
+
+	// Define the routes
 	router.HandleFunc(apiUrl+"/getImage", GetImage).Methods("GET")
 	router.HandleFunc(apiUrl+"/getImageList", GetImageList).Methods("GET")
 	router.HandleFunc(apiUrl+"/uploadImage", UploadImage).Methods("POST")
 
-	startServer(router)
+	// Start the server
+	startServer(router, localMode)
+}
+
+// Connect to the database
+func ConnectDatabase() *sql.DB {
+	var db *sql.DB
+	configuration := mysql.NewConfig()
+	(*configuration).Net = "tcp"
+	(*configuration).Addr = myEnvironment["GALLERY_HOST"]
+	(*configuration).User = myEnvironment["GALLERY_USER"]
+	(*configuration).Passwd = myEnvironment["GALLERY_PASSWORD"]
+	(*configuration).DBName = myEnvironment["GALLERY_DATABASE"]
+	(*configuration).ParseTime = true
+
+	db, err := sql.Open("mysql", configuration.FormatDSN())
+	if err != nil {
+		panic(err)
+	}
+
+	return db
 }
 
 // Load the environment variables
@@ -54,33 +93,9 @@ func corsMiddleware(next http.Handler) http.Handler {
 	})
 }
 
-// Connect to the database
-func ConnectDatabase() *sql.DB {
-	var db *sql.DB
-	configuration := mysql.NewConfig()
-	(*configuration).Net = "tcp"
-	(*configuration).Addr = myEnvironment["GALLERY_HOST"]
-	(*configuration).User = myEnvironment["GALLERY_USER"]
-	(*configuration).Passwd = myEnvironment["GALLERY_PASSWORD"]
-	(*configuration).DBName = myEnvironment["GALLERY_DATABASE"]
-	(*configuration).ParseTime = true
-
-	db, err := sql.Open("mysql", configuration.FormatDSN())
-	if err != nil {
-		panic(err)
-	}
-
-	return db
-}
-
 // Start the server
-func startServer(router *mux.Router) {
-	var httpMode = false
-	if _, err := os.Stat(myEnvironment["CERT_FILE"]); os.IsNotExist(err) {
-		httpMode = true
-	}
-
-	if httpMode {
+func startServer(router *mux.Router, localMode bool) {
+	if localMode {
 		// Start the HTTP server
 		log.Fatal(
 			http.ListenAndServe(
