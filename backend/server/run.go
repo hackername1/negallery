@@ -90,22 +90,14 @@ func corsMiddleware(next http.Handler) http.Handler {
 func requestCheck(next http.Handler) http.Handler {
 	// Set up the router mode variables
 	var host = webHost
-	var scheme = "https"
 	if localMode {
 		host = localHost
-		scheme = "http"
 	}
 
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// Check the request host
 		if r.Host != host+serverPort {
 			http.Error(w, "404 not found", http.StatusNotFound)
-			return
-		}
-
-		// Check the request scheme
-		if r.URL.Scheme != scheme {
-			http.Error(w, "Invalid scheme", http.StatusForbidden)
 			return
 		}
 
