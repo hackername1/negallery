@@ -11,13 +11,13 @@ import (
 )
 
 func Run() {
+	// Load the environment variables
+	loadEnvironment()
+
 	// Determine whether host is local or web
 	if _, err := os.Stat(myEnvironment["CERT_FILE"]); os.IsNotExist(err) {
 		localMode = true
 	}
-
-	// Load the environment variables
-	loadEnvironment()
 
 	// Connect to the database
 	database = ConnectDatabase()
@@ -25,7 +25,7 @@ func Run() {
 	// Create amd set up the router
 	router := mux.NewRouter()
 	router.Use(corsMiddleware)
-	router.Use(requestCheck)
+	//router.Use(requestCheck)
 
 	// Define the routes
 	router.HandleFunc(apiUrl+"/getImage", GetImage).Methods("GET")
@@ -118,6 +118,7 @@ func requestCheck(next http.Handler) http.Handler {
 func startServer(router *mux.Router) {
 	if localMode {
 		// Start the HTTP server
+		log.Println("Starting the server on port", serverPort)
 		log.Fatal(
 			http.ListenAndServe(
 				serverPort,
