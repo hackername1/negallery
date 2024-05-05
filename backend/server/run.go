@@ -98,7 +98,7 @@ func requestCheck(next http.Handler) http.Handler {
 
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// Check the request host
-		if r.Host != host {
+		if r.Host != host+serverPort {
 			http.Error(w, "404 not found", http.StatusNotFound)
 			return
 		}
