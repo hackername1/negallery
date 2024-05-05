@@ -9,8 +9,12 @@ var myEnvironment map[string]string
 // Constants
 const envPath = ".env"
 const tempPath = "/temp"
+
 const serverPort = ":8443"
 const apiUrl = "/api/v1"
+const localHost = "localhost"
+const webHost = "gallery.nevolodia.com"
+
 const serverErrorString = "Error on the server"
 
 const (
