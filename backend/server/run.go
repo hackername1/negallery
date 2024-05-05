@@ -25,7 +25,7 @@ func Run() {
 	// Create amd set up the router
 	router := mux.NewRouter()
 	router.Use(corsMiddleware)
-	//router.Use(requestCheck)
+	router.Use(requestCheck)
 
 	// Define the routes
 	router.HandleFunc(apiUrl+"/getImage", GetImage).Methods("GET")
