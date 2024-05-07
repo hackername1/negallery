@@ -18,7 +18,7 @@ func UploadImage(w http.ResponseWriter, r *http.Request) {
 	var imageData ImageData
 
 	// Check password
-	if r.FormValue("password") != myEnvironment["GALLERY_PASSWORD"] {
+	if r.FormValue("password") != myEnvironment["GALLERY_ADMIN_PASSWORD"] {
 		http.Error(w, "Wrong password", http.StatusUnauthorized)
 		return
 	}
